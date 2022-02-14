@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,13 +30,39 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+        binding.toastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                Toast myToast = Toast.makeText(getActivity(), "Hello toast!", Toast.LENGTH_SHORT);
+                myToast.show();
             }
         });
+
+        binding.countButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                countMe(view);
+            }
+        });
+
+        binding.randomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentCount = Integer.parseInt(binding.textviewFirst.getText().toString());
+                FirstFragmentDirections.ActionFirstFragmentToSecondFragment action = FirstFragmentDirections.actionFirstFragmentToSecondFragment(currentCount);
+                NavHostFragment.findNavController(FirstFragment.this).navigate(action);
+            }
+        });
+    }
+
+    private void countMe(View view) {
+        // get the value of the text view
+        String countString = binding.textviewFirst.getText().toString();
+        // convert value to a number and increment it
+        Integer count = Integer.parseInt(countString);
+        count++;
+        // display the new value in the text view
+        binding.textviewFirst.setText(Integer.toString(count));
     }
 
     @Override
@@ -43,5 +70,4 @@ public class FirstFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }
